@@ -31,21 +31,21 @@ class NeuralNet(Net):
             self._feedforward(x)
         else:
             delta = y - self._feedforward(x)
-        self.layers[-1].delta = delta
+        self.layers[-1].delta = delta * self.layers[-1].activation_d(self.layers[-1].input)
         for layer_idx in range(len(self.layers) - 2, 0, -1):
             self.layers[layer_idx].delta = np.dot(self.layers[layer_idx + 1].weights,
-                                                  self.layers[layer_idx + 1].delta.T).T
+                                                  self.layers[layer_idx + 1].delta.T).T * \
+                                           self.layers[layer_idx].activation_d(self.layers[layer_idx].input)
         self._is_back_propagation = True
 
     def _update_weight(self):
         assert self._is_back_propagation, 'do back propagation before update weight'
         for layer_idx in range(1, len(self.layers)):
-            self.layers[layer_idx].weights = self.layers[layer_idx].weights + \
-                                             self.learning_rate * np.outer(
-                                                 self.layers[layer_idx - 1].output,
-                                                 self.layers[layer_idx].delta *
-                                                 self.layers[layer_idx].activation_d(self.layers[layer_idx].input)
-                                             )
+            self.layers[layer_idx].weights += self.learning_rate * np.outer(
+                self.layers[layer_idx - 1].output,
+                self.layers[layer_idx].delta
+            )
+            self.layers[layer_idx].bias += self.learning_rate * self.layers[layer_idx].delta
         self._is_back_propagation = False
         self._is_feedforward = False
 
@@ -83,7 +83,7 @@ class NeuralNet(Net):
             for sample_idx in range(train_sample_num):
                 output = self._feedforward(train_data[sample_idx])
                 sum_train_error = sum_train_error + self._computer_error(output, train_labels[sample_idx])
-            print('train error : %0.2f' % sum_train_error, end='  ')
+            print('train error : %0.4f' % sum_train_error, end='  ')
 
             # compute validation error
             if validation_data is not None:
@@ -93,7 +93,7 @@ class NeuralNet(Net):
                     output = self._feedforward(validation_data[sample_idx])
                     sum_validation_error = sum_validation_error + \
                                            self._computer_error(output, validation_labels[sample_idx])
-                print('validation error : %0.2f' % sum_validation_error, end='  ')
+                print('validation error : %0.4f' % sum_validation_error, end='  ')
             print('')
 
     def add_layer(self, layer):
