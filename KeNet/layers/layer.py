@@ -57,3 +57,17 @@ class linear_layer(layer):
 
     def activation_d(self, input=None):
         return AF.linear_d(self.input) if input is None else AF.logistic_d(input)
+
+class softmax_layer(layer):
+    """
+        softmax layer
+    """
+    def __init__(self, nodes_num: 'number of nodes', is_input: 'a flag to tell is it an input layer' = False, *args,
+                 **kwargs):
+        return super(softmax_layer, self).__init__(nodes_num, is_input, *args, **kwargs)
+
+    def activation(self, input=None):
+        return AF.softmax(self.input) if input is None else AF.logistic(input)
+
+    def activation_d(self):
+        raise Exception('softmax layer only can be output layer!')
