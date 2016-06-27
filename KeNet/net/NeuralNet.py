@@ -31,7 +31,7 @@ class NeuralNet(Net):
             self._feedforward(x)
         else:
             delta = y - self._feedforward(x)
-        self.layers[-1].delta = delta * self.layers[-1].activation_d(self.layers[-1].input)
+        self.layers[-1].delta = delta
         for layer_idx in range(len(self.layers) - 2, 0, -1):
             self.layers[layer_idx].delta = np.dot(self.layers[layer_idx + 1].weights,
                                                   self.layers[layer_idx + 1].delta.T).T * \
