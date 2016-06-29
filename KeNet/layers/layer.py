@@ -5,6 +5,7 @@ from ..core import activation_function as AF
 class layer(object):
     def __init__(self, nodes_num: 'number of nodes', is_input: 'a flag to tell is it an input layer' = False, *args,
                  **kwargs):
+        super(layer, self).__init__(*args, **kwargs)
         self.is_input = is_input
         self.nodes_num = nodes_num
         self.weights = None
@@ -12,7 +13,6 @@ class layer(object):
         self.input = None
         self.output = None
         self.delta = None
-        super(layer, self).__init__(*args, **kwargs)
 
     def activation(self):
         pass
@@ -33,12 +33,12 @@ class logistic_layer(layer):
 
     def __init__(self, nodes_num: 'number of nodes', is_input: 'a flag to tell is it an input layer' = False, *args,
                  **kwargs):
-        return super(logistic_layer, self).__init__(nodes_num, is_input, *args, **kwargs)
+        super(logistic_layer, self).__init__(nodes_num, is_input, *args, **kwargs)
 
     def activation(self, x=None):
         return AF.logistic(self.input) if input is None else AF.logistic(x)
 
-    def activation_d(self, input=None):
+    def activation_d(self, x=None):
         return AF.logistic_d(self.input) if input is None else AF.logistic_d(x)
 
 
@@ -49,7 +49,7 @@ class linear_layer(layer):
 
     def __init__(self, nodes_num: 'number of nodes', is_input: 'a flag to tell is it an input layer' = False, *args,
                  **kwargs):
-        return super(linear_layer, self).__init__(nodes_num, is_input, *args, **kwargs)
+        super(linear_layer, self).__init__(nodes_num, is_input, *args, **kwargs)
 
     def activation(self, x=None):
         return AF.linear(self.input) if input is None else AF.logistic(x)
@@ -65,7 +65,7 @@ class softmax_layer(layer):
 
     def __init__(self, nodes_num: 'number of nodes', is_input: 'a flag to tell is it an input layer' = False, *args,
                  **kwargs):
-        return super(softmax_layer, self).__init__(nodes_num, is_input, *args, **kwargs)
+        super(softmax_layer, self).__init__(nodes_num, is_input, *args, **kwargs)
 
     def activation(self, x=None):
         return AF.softmax(self.input) if input is None else AF.logistic(x)
