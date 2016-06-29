@@ -55,6 +55,8 @@ class Utilor(object):
     def _read_data(self, file_path):
         pass
 
+    def _to_categorical(self, labels):
+        pass
 
 if __name__ == '__main__':
     utilor = Utilor('mnist')
