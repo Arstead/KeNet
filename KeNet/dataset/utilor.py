@@ -5,6 +5,7 @@ import urllib.request
 
 class Utilor(object):
     def __init__(self, name, base_path=config.data_base_path, *args, **kwargs):
+        super(Utilor, self).__init__(*args, **kwargs)
         self.name = name
         self.base_path = base_path
         self.dir_name = name
@@ -12,7 +13,6 @@ class Utilor(object):
         self.train_num = 0
         self.test_num = 0
         self.class_num = 0
-        return super(Utilor, self).__init__(*args, **kwargs)
 
     def _check_dir(self):
         dir_path = self.get_dirpath()
@@ -55,7 +55,7 @@ class Utilor(object):
     def _read_data(self, file_path):
         pass
 
-    def _to_categorical(self, labels):
+    def _to_categorical(self, labels, class_num):
         pass
 
 if __name__ == '__main__':
