@@ -10,7 +10,7 @@ class NeuralNet(Net):
     def __init__(self, *args, **kwargs):
         self._is_back_propagation = False
         self._is_feedforward = False
-        return super(NeuralNet, self).__init__(*args, **kwargs)
+        super(NeuralNet, self).__init__(*args, **kwargs)
 
     def _feedforward(self, x):
         assert self.is_complie, 'complie network before you use it.'
