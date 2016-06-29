@@ -41,7 +41,7 @@ class Utilor(object):
                 print('File \'%s\' isn\'t exist, please wait few time for us to download...' % file_name)
                 assert file_url is not None, 'File %s isn\'t exist, which requests an url' % file_name
                 urllib.request.urlretrieve(file_url, file_path)
-                print('File \'%s\' downloads finish')
+                print('File \'%s\' downloads finish' % file_name)
 
     def _add_file(self, file_name, file_url=None):
         self.file_info_list.append((file_name, file_url))
