@@ -16,7 +16,7 @@ def fun(x):
 if __name__ == '__main__':
 
     m = Mnist()
-    (train_data, train_labels), (test_data, test_labels) = m.load(to_categorical=True)
+    (train_data, train_labels), (test_data, test_labels) = m.load(is_to_categorical=True)
 
     train_data /= 255
     test_data /= 255
@@ -28,6 +28,6 @@ if __name__ == '__main__':
     nn.add_layer(softmax_layer(nodes_num=10))
     nn.complie(epoch=400, learning_rate=0.1)
 
-    nn.train(train_data[0:3000], train_labels[0:3000], test_data[0:1000], test_labels[0:1000])
+    nn.train(train_data[0:100], train_labels[0:100], test_data[0:20], test_labels[0:20])
 
 
