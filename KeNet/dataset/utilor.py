@@ -1,6 +1,21 @@
 import os
+import numpy as np
 from ..core import config
 import urllib.request
+
+
+def to_categorical(labels, class_num):
+    c = np.zeros([len(labels), class_num])
+    for idx, label in enumerate(labels):
+        c[idx, label - 1] = 1
+    return c
+
+
+def to_labels(categorical):
+    l = np.zeros(len(categorical))
+    for idx, c in enumerate(categorical):
+        l[idx] = np.argmax(c)
+    return l
 
 
 class Utilor(object):
@@ -55,8 +70,6 @@ class Utilor(object):
     def _read_data(self, file_path):
         pass
 
-    def _to_categorical(self, labels, class_num):
-        pass
 
 if __name__ == '__main__':
     utilor = Utilor('mnist')
