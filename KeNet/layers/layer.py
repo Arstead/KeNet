@@ -12,7 +12,7 @@ class layer(object):
         self.input = None
         self.output = None
         self.delta = None
-        return super(layer, self).__init__(*args, **kwargs)
+        super(layer, self).__init__(*args, **kwargs)
 
     def activation(self):
         pass
@@ -35,39 +35,40 @@ class logistic_layer(layer):
                  **kwargs):
         return super(logistic_layer, self).__init__(nodes_num, is_input, *args, **kwargs)
 
-    def activation(self, input=None):
-        return AF.logistic(self.input) if input is None else AF.logistic(input)
+    def activation(self, x=None):
+        return AF.logistic(self.input) if input is None else AF.logistic(x)
 
     def activation_d(self, input=None):
-        return AF.logistic_d(self.input) if input is None else AF.logistic_d(input)
+        return AF.logistic_d(self.input) if input is None else AF.logistic_d(x)
 
 
 class linear_layer(layer):
     """
         linear layer
     """
+
     def __init__(self, nodes_num: 'number of nodes', is_input: 'a flag to tell is it an input layer' = False, *args,
                  **kwargs):
         return super(linear_layer, self).__init__(nodes_num, is_input, *args, **kwargs)
 
+    def activation(self, x=None):
+        return AF.linear(self.input) if input is None else AF.logistic(x)
 
-    def activation(self, input=None):
-        return AF.linear(self.input) if input is None else AF.logistic(input)
+    def activation_d(self, x=None):
+        return AF.linear_d(self.input) if input is None else AF.logistic_d(x)
 
-
-    def activation_d(self, input=None):
-        return AF.linear_d(self.input) if input is None else AF.logistic_d(input)
 
 class softmax_layer(layer):
     """
         softmax layer
     """
+
     def __init__(self, nodes_num: 'number of nodes', is_input: 'a flag to tell is it an input layer' = False, *args,
                  **kwargs):
         return super(softmax_layer, self).__init__(nodes_num, is_input, *args, **kwargs)
 
-    def activation(self, input=None):
-        return AF.softmax(self.input) if input is None else AF.logistic(input)
+    def activation(self, x=None):
+        return AF.softmax(self.input) if input is None else AF.logistic(x)
 
-    def activation_d(self):
+    def activation_d(self, x=None):
         raise Exception('softmax layer only can be output layer!')
