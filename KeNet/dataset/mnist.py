@@ -6,13 +6,13 @@ import struct
 
 class Mnist(Utilor):
     def __init__(self, *args, **kwargs):
+        super(Mnist, self).__init__(name='mnist', *args, **kwargs)
         # some property of MNIST
         self.image_rows = 28
         self.image_cols = 28
         self.train_num = 60000
         self.test_num = 10000
         self.class_num = 10
-        super(Mnist, self).__init__(name='mnist', *args, **kwargs)
 
     def load(self, to_categorical=False):
         TD_name = 'train-images-idx3-ubyte.gz'                                  # train data file name
@@ -50,25 +50,26 @@ class Mnist(Utilor):
         ED_path = self._get_filepath(ED_name)
         file_in = gzip.GzipFile(ED_path)
         ED = self._read_data(file_in)
+        file_in.close()
         del file_in
 
         # read test labels
         EL_path = self._get_filepath(EL_name)
         file_in = gzip.GzipFile(EL_path)
         EL = self._read_labels(file_in)
+        file_in.close()
         del file_in
 
         if to_categorical:
-            TL = self._to_categorical(TL)
-            EL = self._to_categorical(EL)
+            TL = self._to_categorical(TL, self.class_num)
+            EL = self._to_categorical(EL, self.class_num)
         return (TD, TL), (ED, EL)
 
-    def _to_categorical(self, labels):
-        c = np.zeros([len(labels), self.class_num])
+    def _to_categorical(self, labels, class_num):
+        c = np.zeros([len(labels), class_num])
         for idx, label in enumerate(labels):
             c[idx, label - 1] = 1
         return c
-
 
     def _read_labels(self, file_in):
         """
