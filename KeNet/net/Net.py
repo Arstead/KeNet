@@ -2,12 +2,12 @@ from KeNet.layers import *
 
 class Net(object):
     def __init__(self, *args, **kwargs):
+        super(Net, self).__init__(*args, **kwargs)
         self.layers = []
         self.is_complie = False
         self.learning_rate = None
         self.batch_size = None
         self.epoch = None
-        return super(Net, self).__init__(*args, **kwargs)
 
     def _feedforward(self, x):
         pass
