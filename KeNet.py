@@ -1,6 +1,8 @@
+from __future__ import division
 from KeNet.layers.layer import logistic_layer
-from KeNet.layers.layer import linear_layer
+from KeNet.layers.layer import softmax_layer
 from KeNet.net.NeuralNet import *
+from KeNet.dataset.mnist import *
 
 __version__ = '0.1'
 
@@ -12,22 +14,20 @@ def fun(x):
 
 
 if __name__ == '__main__':
+
+    m = Mnist()
+    (train_data, train_labels), (test_data, test_labels) = m.load(to_categorical=True)
+
+    train_data /= 255
+    test_data /= 255
+
     print('__main__')
     nn = NeuralNet()
-    nn.add_layer(linear_layer(nodes_num=3, is_input=True))
-    nn.add_layer(linear_layer(nodes_num=4))
-    nn.add_layer(linear_layer(nodes_num=1))
-    nn.complie(epoch=300, learning_rate=0.1)
+    nn.add_layer(logistic_layer(nodes_num=784, is_input=True))
+    nn.add_layer(logistic_layer(nodes_num=1000))
+    nn.add_layer(softmax_layer(nodes_num=10))
+    nn.complie(epoch=400, learning_rate=0.1)
 
-    x = np.random.random([100, 3])
-    z = fun(x)
-    y = fun(x) + 0.02 * np.random.random([100])
+    nn.train(train_data[0:3000], train_labels[0:3000], test_data[0:1000], test_labels[0:1000])
 
-    x_t = np.random.random([20, 3])
-    y_t = fun(x_t) + 0.02 * np.random.random([20])
 
-    nn.train(x, y, x_t, y_t)
-
-    o = nn.predict(x)
-
-    print(np.sum((o.reshape(1, -1) - y)**2))
