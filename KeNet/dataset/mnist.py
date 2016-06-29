@@ -14,7 +14,7 @@ class Mnist(Utilor):
         self.class_num = 10
         super(Mnist, self).__init__(name='mnist', *args, **kwargs)
 
-    def load(self, is_categorical=False):
+    def load(self, to_categorical=False):
         TD_name = 'train-images-idx3-ubyte.gz'                                  # train data file name
         TD_url = 'http://yann.lecun.com/exdb/mnist/train-images-idx3-ubyte.gz'  # train data url
         TL_name = 'train-labels-idx1-ubyte.gz'                                  # train labels file name
@@ -58,10 +58,9 @@ class Mnist(Utilor):
         EL = self._read_labels(file_in)
         del file_in
 
-        if is_categorical:
+        if to_categorical:
             TL = self._to_categorical(TL)
             EL = self._to_categorical(EL)
-
         return (TD, TL), (ED, EL)
 
     def _to_categorical(self, labels):
