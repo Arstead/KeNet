@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-from .utilor import Utilor
 import gzip
 import struct
+from .utilor import Utilor, to_categorical
+
 
 class Mnist(Utilor):
     def __init__(self, *args, **kwargs):
@@ -14,7 +15,7 @@ class Mnist(Utilor):
         self.test_num = 10000
         self.class_num = 10
 
-    def load(self, to_categorical=False):
+    def load(self, is_to_categorical=False):
         TD_name = 'train-images-idx3-ubyte.gz'                                  # train data file name
         TD_url = 'http://yann.lecun.com/exdb/mnist/train-images-idx3-ubyte.gz'  # train data url
         TL_name = 'train-labels-idx1-ubyte.gz'                                  # train labels file name
@@ -60,16 +61,10 @@ class Mnist(Utilor):
         file_in.close()
         del file_in
 
-        if to_categorical:
-            TL = self._to_categorical(TL, self.class_num)
-            EL = self._to_categorical(EL, self.class_num)
+        if is_to_categorical:
+            TL = to_categorical(TL, self.class_num)
+            EL = to_categorical(EL, self.class_num)
         return (TD, TL), (ED, EL)
-
-    def _to_categorical(self, labels, class_num):
-        c = np.zeros([len(labels), class_num])
-        for idx, label in enumerate(labels):
-            c[idx, label - 1] = 1
-        return c
 
     def _read_labels(self, file_in):
         """
