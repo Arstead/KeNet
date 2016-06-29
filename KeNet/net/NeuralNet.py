@@ -8,9 +8,9 @@ import numpy as np
 
 class NeuralNet(Net):
     def __init__(self, *args, **kwargs):
+        super(NeuralNet, self).__init__(*args, **kwargs)
         self._is_back_propagation = False
         self._is_feedforward = False
-        super(NeuralNet, self).__init__(*args, **kwargs)
 
     def _feedforward(self, x):
         assert self.is_complie, 'complie network before you use it.'
@@ -51,6 +51,9 @@ class NeuralNet(Net):
 
     def _computer_error(self, x, y):
         return EF.mean_squared_error(x, y)
+
+    def _computer_precision(self, x, y):
+        return EF.precision(x, y)
 
     def predict(self, x):
         return self._feedforward(x)
