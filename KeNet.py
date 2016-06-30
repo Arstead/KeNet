@@ -24,10 +24,10 @@ if __name__ == '__main__':
     print('__main__')
     nn = NeuralNet()
     nn.add_layer(logistic_layer(nodes_num=784, is_input=True))
-    nn.add_layer(logistic_layer(nodes_num=1000))
+    nn.add_layer(logistic_layer(nodes_num=600))
     nn.add_layer(softmax_layer(nodes_num=10))
-    nn.complie(epoch=400, learning_rate=0.1)
+    nn.complie(epoch=400, learning_rate=0.05, batch_size=64)
 
-    nn.train(train_data[0:100], train_labels[0:100], test_data[0:20], test_labels[0:20])
+    nn.train(train_data[0:5000], train_labels[0:5000], test_data[0:200], test_labels[0:200])
 
 
