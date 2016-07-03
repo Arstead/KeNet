@@ -24,7 +24,8 @@ def CCA(X, Y, n=None, r=0):
             projected X
         Y_:
             projected Y
-        References : http://blog.csdn.net/statdm/article/details/7585113
+    References:
+        http://blog.csdn.net/statdm/article/details/7585113
     """
     m1, n1 = X.shape
     m2, n2 = Y.shape
