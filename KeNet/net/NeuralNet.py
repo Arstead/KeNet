@@ -88,11 +88,10 @@ class NeuralNet(Net):
     def predict(self, X):
         return self._feedforward(X)
 
-    def train(self, train_data, train_labels, validation_data=None, validation_labels=None):
+    def train(self, train_data, train_labels, validation_data=None, validation_labels=None, train_delta=None):
         assert type(train_data) is np.ndarray, 'input of train data need to be type of ndarry'
         assert type(train_labels) is np.ndarray, 'train data labels need to be type of ndarry'
-        assert train_data.shape[0] == train_labels.shape[
-            0], 'number of train data must be equal to number of train labels'
+        assert len(train_data) == len(train_labels), 'number of train data must be equal to number of train labels'
 
         assert (validation_labels is not None) == (validation_data is not None), \
             'validation set need to carry both data and labels'
@@ -103,6 +102,11 @@ class NeuralNet(Net):
             assert validation_data.shape[0] == validation_labels.shape[
                 0], 'number of validation data must be equal to number of train labels'
 
+        if train_delta is not None:
+            assert type(train_delta) is np.ndarray, 'input of delta need to be type of ndarry'
+            assert len(train_data) == len(train_delta), 'number of train delta must be equal to number of train data'
+            assert train_delta.shape[0] == self.layers[-1].nodes_num, 'length of delta must be equal to ' \
+                                                                'nodes number of last layer'
         train_samples_num = train_data.shape[0]
         for i in range(self.epoch):
             print('epoch %d:' % i, end='  ')
@@ -112,7 +116,11 @@ class NeuralNet(Net):
             for batch_idx in range(batch_num):
                 T = train_data[batch_idx * self.batch_size: (batch_idx + 1) * self.batch_size]
                 L = train_labels[batch_idx * self.batch_size: (batch_idx + 1) * self.batch_size]
-                self._back_propagation(T, L)
+                if train_delta is None:
+                    self._back_propagation(T, L)
+                else:
+                    D = train_delta[batch_idx * self.batch_size: (batch_idx + 1) * self.batch_size]
+                    self._back_propagation(T, L, D)
                 self._update_weight()
 
             # compute train MSE
