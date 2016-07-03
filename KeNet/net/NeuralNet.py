@@ -88,13 +88,16 @@ class NeuralNet(Net):
     def predict(self, X):
         return self._feedforward(X)
 
-    def train(self, train_data, train_labels, validation_data=None, validation_labels=None, train_delta=None):
+    def train(self, train_data, train_labels=None, validation_data=None, validation_labels=None, train_delta=None):
         assert type(train_data) is np.ndarray, 'input of train data need to be type of ndarry'
         assert type(train_labels) is np.ndarray, 'train data labels need to be type of ndarry'
         assert len(train_data) == len(train_labels), 'number of train data must be equal to number of train labels'
 
         assert (validation_labels is not None) == (validation_data is not None), \
             'validation set need to carry both data and labels'
+
+        assert (train_labels is not None) or (train_delta is not None), 'Train labels or train delta, ' \
+                                                                        'at last one kind of data need to be provided '
 
         if validation_data is not None:
             assert type(validation_data) is np.ndarray, 'input of validation data need to be type of ndarry'
@@ -115,12 +118,13 @@ class NeuralNet(Net):
             batch_num = train_samples_num // self.batch_size
             for batch_idx in range(batch_num):
                 T = train_data[batch_idx * self.batch_size: (batch_idx + 1) * self.batch_size]
-                L = train_labels[batch_idx * self.batch_size: (batch_idx + 1) * self.batch_size]
-                if train_delta is None:
+                if train_labels is not None:
+                    # train labels has priority
+                    L = train_labels[batch_idx * self.batch_size: (batch_idx + 1) * self.batch_size]
                     self._back_propagation(T, L)
                 else:
                     D = train_delta[batch_idx * self.batch_size: (batch_idx + 1) * self.batch_size]
-                    self._back_propagation(T, L, D)
+                    self._back_propagation(T, D)
                 self._update_weight()
 
             # compute train MSE
